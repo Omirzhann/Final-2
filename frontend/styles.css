@@ -1,0 +1,184 @@
+/* Общие стили */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f3f4f6; /* Светло-серый фон */
+}
+
+/* Центровка и адаптация контента */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+}
+
+/* Стили заголовков */
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+/* Стили для контейнера */
+.container {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+/* Стили формы */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form input {
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+form input:focus {
+    outline: none;
+    border-color: #4CAF50; /* Зеленый цвет фокуса */
+}
+
+button {
+    background: #4CAF50; /* Зеленая кнопка */
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #45a049; /* Более темный зеленый */
+}
+
+/* Контейнер проектов */
+.project-container {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Добавление скролла, если проектов много */
+}
+
+.project-container h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+/* Стили проекта */
+.project {
+    background: #f9f9f9;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.project img {
+    max-width: 80px;
+    max-height: 80px;
+    object-fit: cover;
+    margin-right: 1rem;
+    border-radius: 5px;
+}
+
+.project-info {
+    flex-grow: 1;
+    margin-right: 1rem;
+}
+
+.project-info h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.project-info p {
+    margin: 0;
+    color: #666;
+}
+
+/* Стили для кнопки удаления */
+.project button {
+    background: #e74c3c; /* Красная кнопка */
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.project button:hover {
+    background: #c0392b;
+}
+
+/* Дополнительные стили */
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Стили для модального окна */
+.modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  

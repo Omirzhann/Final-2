@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enter OTP</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Enter OTP</h1>
+    <form id="otpForm">
+      <input type="text" id="otp" placeholder="Enter OTP" required />
+      <button type="submit">Verify OTP</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("otpForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const username = localStorage.getItem("username"); // Получаем email из localStorage
+      const otp = document.getElementById("otp").value;
+
+      // Проверяем, есть ли email в localStorage
+      if (!username) {
+        alert("Email не найден. Пожалуйста, войдите заново.");
+        window.location.href = "login.html"; // Перенаправление на страницу входа
+        return;
+      }
+
+      const data = {
+        username: username,
+        otp: otp,
+      };
+
+      try {
+        const response = await fetch("http://localhost:3000/auth/verify-otp", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          alert(result.message || "OTP verified successfully!");
+          localStorage.setItem("token", result.token); // Сохраняем токен
+          window.location.href = "portfolio.html"; // Перенаправление на portfolio.html
+        } else {
+          alert(result.message || "Ошибка при проверке OTP.");
+        }
+      } catch (error) {
+        console.error("Ошибка:", error);
+        alert("Произошла ошибка: " + error.message);
+      }
+    });
+  </script>
+</body>
+</html>

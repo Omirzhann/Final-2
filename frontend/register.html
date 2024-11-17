@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Register</h1>
+    <form id="registerForm">
+      <input type="email" id="username" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <input type="text" id="firstName" placeholder="First Name" required />
+      <input type="text" id="lastName" placeholder="Last Name" required />
+      <input type="number" id="age" placeholder="Age" required />
+      <select id="gender" required>
+        <option value="" disabled selected>Select Gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+      <button type="submit">Register</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+    
+      const username = document.getElementById("username").value;
+      const data = {
+        username: username,
+        password: document.getElementById("password").value,
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        age: document.getElementById("age").value,
+        gender: document.getElementById("gender").value,
+      };
+    
+      try {
+        const response = await fetch("http://localhost:3000/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+    
+        const result = await response.json();
+    
+        if (response.ok) {
+          alert("Регистрация прошла успешно!");
+          localStorage.setItem("username", username); // Сохраняем email в localStorage
+          window.location.href = "login.html"; // Перенаправление на login.html
+        } else {
+          alert(result.message || "Ошибка при регистрации.");
+        }
+      } catch (error) {
+        console.error("Ошибка:", error);
+        alert("Произошла ошибка: " + error.message);
+      }
+    });
+    
+  </script>
+</body>
+</html>

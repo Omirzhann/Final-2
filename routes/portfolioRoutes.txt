@@ -1,0 +1,115 @@
+const express = require('express');
+const router = express.Router();
+const portfolioController = require('../controllers/portfolioController');
+const authMiddleware = require('../middleware/authMiddleware');
+
+// Добавление нового проекта
+exports.addPortfolio = async (req, res) => {
+  try {
+    const { title, description, images } = req.body;
+    const { userId, role } = req.user;
+
+    // Проверка роли
+    if (!['admin', 'editor'].includes(role)) {
+      return res.status(403).json({ message: 'У вас нет прав для добавления проектов' });
+    }
+
+    // Проверка на обязательные поля
+    if (!title || !description || !images || images.length === 0) {
+      return res.status(400).json({ message: 'Все поля обязательны для заполнения' });
+    }
+
+    const portfolio = new Portfolio({
+      userId,
+      title,
+      description,
+      images,
+    });
+
+    await portfolio.save();
+    res.status(201).json({ message: 'Проект успешно добавлен', portfolio });
+  } catch (error) {
+    console.error('Ошибка при добавлении портфолио:', error);
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+};
+
+// Получение всех проектов пользователя
+exports.getAllPortfolios = async (req, res) => {
+  try {
+    const { userId, role } = req.user;
+
+    let portfolios;
+    if (role === 'admin') {
+      // Администратор видит все проекты
+      portfolios = await Portfolio.find().sort({ createdAt: -1 });
+    } else {
+      // Обычные пользователи видят только свои проекты
+      portfolios = await Portfolio.find({ userId }).sort({ createdAt: -1 });
+    }
+
+    res.status(200).json({ portfolios });
+  } catch (error) {
+    console.error('Ошибка при получении портфолио:', error);
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+};
+
+// Обновление проекта
+exports.updatePortfolio = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, images } = req.body;
+    const { userId, role } = req.user;
+
+    const portfolio = await Portfolio.findById(id);
+    if (!portfolio) {
+      return res.status(404).json({ message: 'Проект не найден' });
+    }
+
+    // Проверка роли
+    if (portfolio.userId.toString() !== userId && role !== 'admin') {
+      return res.status(403).json({ message: 'У вас нет прав для редактирования этого проекта' });
+    }
+
+    // Проверка на обязательные поля
+    if (!title || !description || !images || images.length === 0) {
+      return res.status(400).json({ message: 'Все поля обязательны для заполнения' });
+    }
+
+    const updatedPortfolio = await Portfolio.findByIdAndUpdate(
+      id,
+      { title, description, images },
+      { new: true }
+    );
+
+    res.status(200).json({ message: 'Проект успешно обновлён', portfolio: updatedPortfolio });
+  } catch (error) {
+    console.error('Ошибка при обновлении портфолио:', error);
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+};
+
+// Удаление проекта
+exports.deletePortfolio = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { userId, role } = req.user;
+
+    const portfolio = await Portfolio.findById(id);
+    if (!portfolio) {
+      return res.status(404).json({ message: 'Проект не найден' });
+    }
+
+    // Проверка роли
+    if (portfolio.userId.toString() !== userId && role !== 'admin') {
+      return res.status(403).json({ message: 'У вас нет прав для удаления этого проекта' });
+    }
+
+    await Portfolio.findByIdAndDelete(id);
+    res.status(200).json({ message: 'Проект успешно удалён' });
+  } catch (error) {
+    console.error('Ошибка при удалении портфолио:', error);
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+};
